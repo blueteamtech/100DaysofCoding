@@ -1,0 +1,173 @@
+Day 54 - Intermediate+ Introduction to Web Development with Flask
+
+.446) Create your First Web Server with Flask
+
+	* 
+Download Flask Module on Pycharm then run code
+
+
+
+from flask import Flaskapp = Flask(__name__)
+
+@app.route('/')def hello_world():
+return 'Hello, World!'
+
+Run code. Then from Local Terminal on PyCharm, run flask:
+	* 
+export FLASK_APP=hello.py
+	* 
+flask run
+
+
+
+Local link should show in terminal. This will open the web application.
+
+.447) Understand the Command Line on Windows and Mac
+
+Windows Cheatsheet: http://www.cs.columbia.edu/~sedwards/classes/2015/1102-fall/Command%20Prompt%20Cheatsheet.pdf
+
+Mac Cheatsheet: https://github.com/appbrewery/terminal-mac-cheatsheet
+
+.448) __name__ and __main__: Special Attributes built into Python
+
+from flask import Flaskapp = Flask(__name__)
+
+print(__name__)
+
+#@app.route('/')
+#def hello_world():
+#    return 'Hello, World!'
+
+OUTPUT:
+__main__
+
+Name is a special attribute to find current class function method or descriptor's name. Main means executing code in an interactive module. It is not running from an imported module. 
+
+from flask import Flask
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
+#Below code shows that we are running this module. 
+#Eliminates the need to set app to hello.py and run in the terminal manually.
+
+if __name == "__main__":
+    app.run()
+
+.449) Python Functions as First Class Objects: Passing & Nesting Functions
+
+Python Functions are first class objects. This means it can be passed around as arguments. e.g. intiger/string/float etc.
+
+## ********Day 54 Start**********
+## Functions can have inputs/functionality/output
+def add(n1, n2):
+    return n1 + n2
+
+def subtract(n1, n2):
+    return n1 - n2
+
+def multiply(n1, n2):
+    return n1 * n2
+
+def divide(n1, n2):
+    return n1 / n2
+
+##Functions are first-class objects, can be passed around as arguments e.g. int/string/float etc.
+
+def calculate(calc_function, n1, n2):
+    return calc_function(n1, n2)
+
+result = calculate(add, 2, 3)
+print(result)
+
+##Functions can be nested in other functions
+
+def outer_function():
+    print("I'm outer")
+    #nested_function only works within outer_function
+    def nested_function():
+        print("I'm inner")
+
+    nested_function()
+
+outer_function()
+
+## Functions can be returned from other functions
+def outer_function():
+    print("I'm outer")
+
+    def nested_function():
+        print("I'm inner")
+
+    return nested_function
+#outer_function is being executed and prints "I'm outer" #and sets reference for nested_function
+inner_function = outer_function()
+#Triggers nested_function to print out "I'm inner" #because it is defined as "return nested_function"
+inner_function()
+
+
+.450) Understanding Python Decorator Functions and the @ Syntax
+&&Question. What does return do? Why does it call nested functions when it's called? What purpose does it have within decorator? Is it necessary?
+
+##Decorator Function wraps a function to give it additional functionality
+## Simple Python Decorator Functions
+import time
+
+def delay_decorator(function):
+    def wrapper_function():
+        time.sleep(2)
+        #Do something before
+        function()
+        function()
+        #Do something after
+    return wrapper_function
+
+@delay_decorator
+def say_hello():
+    print("Hello")
+
+#With the @ syntactic sugar
+@delay_decorator
+def say_bye():
+    print("Bye")
+
+#Without the @ syntactic sugar
+def say_greeting():
+    print("How are you?")
+decorated_function = delay_decorator(say_greeting)
+decorated_function()
+
+.451) [Interactive Coding Exercise] Create Your Own Python Decorator
+
+import time
+#returns time in seconds since 1/1/1970
+current_time = time.time()
+#print(current_time)
+
+def speed_calc_decorator(function):
+        def wrapper_function():
+            start_time = current_time
+            function
+            end_time = current_time
+            print(f"{function.__name__} run speed: {end_time - start_time}s")
+        return wrapper_function
+
+@speed_calc_decorator
+def fast_function():
+    for i in range(10000000):
+        i * i
+    return fast_function
+
+@speed_calc_decorator
+def slow_function():
+    for i in range(100000000):
+        i * i
+    return slow_function
+
+fast_function()
+slow_function()
+
+##OUTPUT:
+fast_function run speed: 0.0s
+slow_function run speed: 0.0s
