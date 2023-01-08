@@ -1,0 +1,184 @@
+Day 55 Goals: what you will make by the end of the day
+
+.452) Day 55 Goals: what you will make by the end of the day
+
+What we will make: A guess the number website. With styling, rendered gif, and inputs via URL.
+
+.453) Working Flask URL Paths and the Flask Debugger
+
+from flask import Flask
+
+app = Flask(__name__)
+
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
+#Converter converts url to any data type specified. String is default.
+#To get entire path as variable, must change datatype as path
+#below output will render the path after username in html
+#can have more than one variable as well
+@app.route("/username/<path:name>/<int:number>")
+def greet(name):
+    return f"Hello there {name}, you are {number} years old!"
+
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
+@app.route("/bye")
+def bye():
+    return "Bye!"
+
+#Add variable sections to URL by marking with <variable_name> 
+#Then the function receives variable name to use inside function
+@app.route("/username/<name>")
+def greet(name):
+    return f"Hello {name}!"
+
+if __name__ == "__main__":
+    app.run(debug=True)
+#Debug = True shows Debug on in application with Debugger PIN. 
+#On the website if error as shown if you save file with new file change, server reloads automatically and updates in terminal.
+#If error, you can see on website what the error is.
+#Flask debugger on the error page. It asks for PIN on console. Helpful for live website
+#With PIN you can troubleshoot and open code to diagnose
+
+.454) Rendering HTML Elements with Flask
+
+from flask import Flask
+
+app = Flask(__name__)
+
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
+#Render HTML and styling
+@app.route('/')
+def hello_world():
+    return '<h1 style="text-align: center">Hello, World!</h1>' \ 
+#pycharm hit enter show \ and split string for formatting in pycharm.
+                '<p>This is my paragraph</p>' \
+                '<img src="https://media0.giphy.com/media/3oriO0OEd9QIDdllqo/200.webp?cid=ecf05e47l4fvhzkynbmiwm2xsaby73rxmwlstojwvgriklud&rid=200.webp&ct=g" width=200>'
+
+@app.route("/bye")
+def bye():
+    return "Bye!"
+
+@app.route("/username/<name>/<int:number>")
+def greet(name):
+    return f"Hello {name}! You are {number} years old."
+
+if __name__ == "__main__":
+    app.run(debug=True)
+
+.455) Challenge: Use Python Decorators to Style HTML Tags
+
+from flask import Flask
+
+app = Flask(__name__)
+
+def make_bold(function):
+    def wrapper_function():
+        return "<b>" + function() + "<\b>"
+        function()
+    return wrapper_function
+
+def make_emphasis(function):
+    def wrapper():
+        return "<em>" + function() + "</em>"
+    return wrapper
+
+def make_underlined(function):
+    def wrapper():
+        return "<u>" + function() + "</u>"
+    return wrapper
+
+@app.route('/')
+def hello_world():
+    return 'Hello, World!'
+
+@app.route("/bye")
+def bye():
+    return "Bye!"
+
+@app.route("/username/<name>/<int:number>")
+def greet(name):
+    return f"Hello {name}! You are {number} years old."
+
+if __name == "__main__":
+    app.run(debug=True)
+
+.456) Advanced Decorators with *args and **kwargs
+
+## ********Day 55 Start**********
+
+## Advanced Python Decorator Functions
+
+class User:
+    def __init__(self, name):
+        self.name = name
+        self.is_logged_in = False
+
+def is_authenticated_decorator(function):
+    def wrapper(*args, **kwargs):
+        if args[0].is_logged_in == True:
+            function(args[0])
+    return wrapper
+
+@is_authenticated_decorator
+def create_blog_post(user):
+    print(f"This is {user.name}'s new blog post.")
+
+new_user = User("angela")
+new_user.is_logged_in = True
+create_blog_post(new_user)
+
+.457) [Interactive Coding Exercise] Advanced Decorators
+
+# Create the logging_decorator() function 👇
+def logging_decorator(function):
+    def wrapper(*args):
+        print(f"You called {function.__name__}{args}")
+        print(f"It returned: {function(args[0], args[1], args[2])}")
+    return wrapper
+
+# Use the decorator 👇
+@logging_decorator
+def multiply(n1, n2, n3):
+    return n1 * n2 * n3
+
+multiply(1, 2, 3)
+.458) Final Project - Higher or Lower URLs
+higher_lowerv2 project
+from flask import Flask
+import random
+
+app = Flask(__name__)
+
+computerNumber = random.randint(0, 9)
+
+@app.route('/')
+def hello_world():
+return '<h1>Guess a number between 0 and 9</h1>' \
+'<img src="https://media.giphy.com/media/3o7aCSPqXE5C6T8tBC/giphy.gif"' \
+'width=400>'
+
+@app.route("/<int:userNumber>")
+def number_check(userNumber):
+if userNumber > computerNumber:
+return "<h1 style='color:red'>Too high, try again!</h1>" \
+"<img src='https://media.giphy.com/media/3o6ZtaO9BZHcOjmErm/giphy.gif'>"
+elif userNumber < computerNumber:
+return "<h1 style='color:blue'>Too low, try again!</h1>" \
+"<img src='https://media.giphy.com/media/jD4DwBtqPXRXa/giphy.gif'>"
+else:
+return "<h1 style='color:green'>You found me!</h1>" \
+"<img src='https://media.giphy.com/media/4T7e4DmcrP9du/giphy.gif'>"
+
+if __name__ == "__main__":
+app.run(debug=True)
